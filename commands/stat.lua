@@ -17,7 +17,7 @@ return {
         
         execcommit:close()
         execdescription:close()
-        local output = "Номер коммита: ".. commit .. "\n" .. "Сообщение: ".. description .. "\n" .. "Детали: https://github.com/Disinterpreter/perl-vk-bot/commit/".. commit 
+        local output = "Номер коммита: ".. commit .. "\n" .. "Сообщение: ".. description .. "\n" .. "Детали: https://github.com/Disinterpreter/kostyan-vk-bot/commit/".. commit 
         -- 
         --print(output)
         vkapi.message.send(data.peer_id, output)
