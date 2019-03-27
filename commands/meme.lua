@@ -22,6 +22,7 @@ local answers = {
 return {
     keywords = {"мем", "мемас", "мемес", "мемчик", "юмор"};
     process = function(data, args)
+        math.randomseed(os.time())
         local post = vkapi.random.getPost(groups[math.random(#groups)])
         local msg = ""
         if args[1] == "где" then

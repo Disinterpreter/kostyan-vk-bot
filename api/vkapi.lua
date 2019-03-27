@@ -24,6 +24,7 @@ local vkuser_config = "access_token="..config.vkuser.."&v="..config.version.."&"
 local message = {}
 
 message.send = function(peer_id, message, attachments)
+    math.randomseed(os.time())
     local body = vk_config.."peer_id="..peer_id.."&random_id="..math.random(99999).."&message="..message
 
     if attachments then
@@ -45,6 +46,7 @@ message.send = function(peer_id, message, attachments)
 end
 
 message.sendSticker = function(peer_id, sticker_id)
+    math.randomseed(os.time())
     local body = vk_config.."peer_id="..peer_id.."&random_id="..math.random(99999).."&sticker_id="..sticker_id
 
     local res = httpc:post(messages.send, body)
@@ -59,6 +61,7 @@ end
 local random = {}
 
 random.getPost = function(owner_id)
+    math.randomseed(os.time())
     local offset = math.random(1, 15000)
     local body = vkuser_config.."count=1&offset="..offset.."&owner_id="..owner_id
 
@@ -78,6 +81,7 @@ random.getPost = function(owner_id)
 end
 
 random.getPhoto = function(owner_id, album)
+    math.randomseed(os.time())
     local offset = math.random(65535)
     local body = vkuser_config.."count=1&offset="..offset.."&owner_id="..owner_id
 
@@ -98,6 +102,7 @@ random.getPhoto = function(owner_id, album)
 end
 
 random.getVideo = function(owner_id)
+    math.randomseed(os.time())
     local offset = math.random(9999)
     local body = vkuser_config.."count=1&offset="..offset.."&owner_id="..owner_id
 

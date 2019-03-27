@@ -17,6 +17,7 @@ local answers = {
 return {
     keywords = {"видос", "вебм", "шебм"};
     process = function(data, args)
+        math.randomseed(os.time())
         local video = vkapi.random.getVideo(videos[math.random(#videos)])
         local msg = ""
         if args[1] == "где" then
