@@ -1,6 +1,8 @@
+const vk = require('../api/vk')
+
 module.exports = {
     keywords: ['привет'],
     callback: (data, args, cmd) => {
-        console.log('Здарова')
+        vk.message.send(data.peer_id, 'Здарова')
     }
 }

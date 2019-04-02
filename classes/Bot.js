@@ -1,7 +1,7 @@
 class Bot {
     constructor(callname, link) {
-        this.callname = callname;
-        this.link = `[${callname}|${link}]`;
+        this.callname = callname.toLowerCase();
+        this.link = `[${callname}|${link}]`.toLowerCase();
         this.buffer = {};
         this.fastres = {};
     }
@@ -13,6 +13,8 @@ class Bot {
     }
 
     on(data) {
+        data.text = data.text.toLowerCase()
+
         let arr = data.text.split(' ');
         arr.forEach( (item) => {
             item.replace(',', '');
@@ -56,9 +58,7 @@ class Bot {
                 command.callback(data, args, cmd)
             }
         }
-        
     }
-
 }
 
 module.exports = Bot

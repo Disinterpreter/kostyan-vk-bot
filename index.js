@@ -1,15 +1,24 @@
+const fs = require('fs')
 const express = require('express');
 const app = express();
 
-const _Bot = require('./classes/Bot');
-const  Bot = new _Bot('Костян', '123456');
-const commands = require('./commands/_export');
+const Bot = require('./classes/Bot');
+let commands = require('./commands/_export');
+
+let config = JSON.parse(fs.readFileSync('config.json', 'utf-8'))
+
+let bot = new Bot(config.name, config['public-id']);
 commands.forEach( item => {
-    Bot.addCommand(item)
+    bot.addCommand(item)
 })
+
+app.use(express.json());
 
 app.post('/', (req, res) => {
     res.send('ok')
+    if (req.body.type == 'message_new') {
+        bot.on(req.body.object)
+    }
 })
 
-app.listen(3000)
+app.listen(80)
