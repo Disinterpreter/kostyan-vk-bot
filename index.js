@@ -15,9 +15,13 @@ commands.forEach( item => {
 app.use(express.json());
 
 app.post('/', (req, res) => {
-    res.send('ok')
-    if (req.body.type == 'message_new') {
-        bot.on(req.body.object)
+    switch (req.body.type) {
+        case 'confirmation':
+        res.send(config.confirmation);
+
+        case 'message_new':
+        res.send('ok')
+        bot.on(req.body.object);
     }
 })
 
