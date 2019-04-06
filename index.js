@@ -18,10 +18,12 @@ app.post('/', (req, res) => {
     switch (req.body.type) {
         case 'confirmation':
         res.send(config.confirmation);
+        break
 
         case 'message_new':
         res.send('ok')
         bot.on(req.body.object);
+        break
     }
 })
 

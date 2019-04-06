@@ -1,15 +1,25 @@
 class Bot {
     constructor(callname, link) {
         this.callname = callname.toLowerCase();
-        this.link = `[${callname}|${link}]`.toLowerCase();
-        this.buffer = {};
+        this.link = `[club${link}|${callname}]`.toLowerCase();
+        this.buffer = [];
         this.fastres = {};
     }
 
     addCommand(item) {
+        this.buffer.push(item)
+    }
+
+    /*
+    addCommand(item) {
         item.keywords.forEach( keyword => {
             this.buffer[keyword] = item
         })
+    }
+    */
+
+    setFastres(peer_id, bool) {
+        this.fastres[peer_id] = bool;
     }
 
     on(data) {
@@ -30,7 +40,7 @@ class Bot {
             if (cmd == this.callname || cmd == this.link) {
                 cmd = args.shift();
             } else {
-                this.fastres[data.peer_id] = false;
+                this.setFastres(data.peer_id, false)
             }
             if (!cmd) {
                 cmd = '';
@@ -47,17 +57,27 @@ class Bot {
                 arr.splice(0, 1);
                 cmd = arr.shift();
                 args = arr;
-            } else {
-                this.fastres[data.peer_id] = true;
             }
         }
 
+        this.buffer.forEach(item => {
+            item.keywords.forEach(keyword => {
+                if (keyword == cmd && item.callback) {
+                    item.callback(data, args, cmd, this)
+                    find = true
+                    return
+                }
+            })
+        })
+        
+        /*
         let command = this.buffer[cmd];
         if (command != undefined || null) {
             if (command.callback) {
-                command.callback(data, args, cmd)
+                command.callback(data, args, cmd, this)
             }
         }
+        */
     }
 }
 
