@@ -24,6 +24,10 @@ app.post('/', (req, res) => {
         res.send('ok')
         bot.on(req.body.object);
         break
+
+        default:
+        res.send('ok')
+        break
     }
 })
 

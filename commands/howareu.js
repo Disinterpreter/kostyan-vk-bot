@@ -7,9 +7,9 @@ let answer = [
 ]
 
 module.exports = {
-    keywords: ['как'],
+    keywords: ['как', 'дела'],
     callback: (data, args, cmd, bot) => {
-        if (args[0] == 'дела') {
+        if (cmd == 'как' && args[0] == 'дела' || cmd == 'дела' && args[0] == 'как') {
             vk.message.send(data.peer_id, answer[Math.floor(Math.random()*answer.length)])
         }
     }

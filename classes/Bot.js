@@ -64,7 +64,6 @@ class Bot {
             item.keywords.forEach(keyword => {
                 if (keyword == cmd && item.callback) {
                     item.callback(data, args, cmd, this)
-                    find = true
                     return
                 }
             })
