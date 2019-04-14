@@ -19,9 +19,9 @@ module.exports = {
             if (answerCounter[data.from_id] != 'ignore') {
                 vk.message.send(data.peer_id, 'Здоровались уже')
                 answerCounter[data.from_id] = 'ignore'
-                console.log(`Ignoring user${data.from_id} 10 min for "hello" command`)
+                console.log(`Ignoring User${data.from_id} 10 min for "hello" command`)
                 setTimeout(() => {
-                    console.log(`user${data.from_id} no longer ignored for "hello" command`)
+                    console.log(`User${data.from_id} no longer ignored for "hello" command`)
                     answerCounter[data.from_id] = false
                 }, 6e5)
             }

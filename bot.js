@@ -1,29 +1,39 @@
 const fs = require('fs');
+const readline = require('readline');
+const vk = require('./api/vk');
+const acl = require('./api/acl')
+
 const Bot = require('./classes/Bot');
 const commands = require('./commands/_export');
-const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'))
+const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 
 const bot = new Bot(config.name, config['public-id']);
 
 // Регистрация команд
 commands.forEach(item => {
-    bot.addCommand(item)
+    if (!item.callback) {
+        item.forEach(_item => { // для нескольких комнад в модуле
+            bot.addCommand(_item)
+        })
+    } else {
+        bot.addCommand(item)
+    }
 })
 
 // Главный обработчик
-bot.addHandler('message_new', (data, res) => {
+bot.addHandler('message_new', async (data, res) => {
     res.send('ok')
 
     data.text = data.text.toLowerCase()
 
     let arr = data.text.split(' ');
     arr.forEach( (item) => {
-        item.replace(',', '');
+        item.replace('[.,?]', '');
     });
 
     let cmd = '';
     let args = '';
-    let force = false;
+    let force = false; // позволяет "проскочить" проверку на обращение к боту
 
     if (bot.fastres[data.peer_id]) {
         cmd = arr.shift();
@@ -43,6 +53,7 @@ bot.addHandler('message_new', (data, res) => {
     }
 
     if (!force) {
+        // поиск обращения к боту
         if (arr[0] != bot.callname && arr[0] != bot.link) {
             return false
         }
@@ -54,9 +65,17 @@ bot.addHandler('message_new', (data, res) => {
         }
     }
 
+    // перебор массива с командами
     bot.buffer.forEach(item => {
-        item.keywords.forEach(keyword => {
+        // поиск совпадений
+        item.keywords.forEach( async keyword => {
             if (keyword == cmd && item.callback) {
+                if (item.access) { // проверка прав (acl)
+                    let can = await acl.hasUserPermissionTo(data.from_id, item.access)
+                    if (!can)
+                        return
+                }
+
                 item.callback(data, args, cmd, bot)
                 return
             }
@@ -72,6 +91,22 @@ bot.addHandler('message_new', (data) => {
 // Обработчик подтверждения
 bot.addHandler('confirmation', (_, res) => {
     res.send(config.confirmation)
+})
+
+// Управление из консоли
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+})
+
+rl.on('line', (input) => {
+    let arr = input.split(' ')
+    let cmd = arr[0]
+    let peer_id = arr[1]
+    arr.splice(0, 2)
+    if (cmd == 'say') {
+        vk.message.send(peer_id, arr.join(' '))
+    }
 })
 
 module.exports = bot

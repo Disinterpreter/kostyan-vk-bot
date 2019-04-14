@@ -16,6 +16,7 @@ module.exports = {
     keywords: ['мем', 'мемас', 'мемчик', 'юмор'],
     callback: async (data) => {
         let post = await vk.random.getPost(groups[Math.floor(Math.random()*groups.length)])
-        vk.message.send(data.peer_id, '', ['wall-174299957_39', 'photo-31480508_456283972', 'photo-31480508_456283970'])
+        vk.message.send(data.peer_id, '', post)
+        //vk.message.send(data.peer_id, '', ['wall-174299957_39', 'photo-31480508_456283972', 'photo-31480508_456283970'])
     }
 }
