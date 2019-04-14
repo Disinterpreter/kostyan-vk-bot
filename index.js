@@ -6,7 +6,7 @@ const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 
 app.use(express.json());
 
-app.post('/stkrush', (req, res) => {
+app.post(`/${config['link-path']}`, (req, res) => {
     Bot.call(req.body, res)
 });
 
