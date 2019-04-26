@@ -1,0 +1,14 @@
+// Пример config.json
+{
+    "v": "5.92",
+    "vk-token": "somelongtoken",
+    "vk-token-user": "somelongusertoken",
+
+    "name": "Бот",
+    "public-id": "0123456",
+    "confirmation": "0a1b2c3d",
+
+    "mongo": "mongodb://user:pass@127.0.0.1:27017/vkbot",
+    "listen-port": "8080",
+    "link-path": "bot" // или "link-path": ""
+}
