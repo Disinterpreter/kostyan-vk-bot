@@ -8,6 +8,13 @@ const User = mongoose.model('User', { id: String, access: Number })
 
 let api = {}
 
+
+api.getUserAccess= async (userid) => {
+    let user = await User.findOne({id: userid}).exec()
+
+    return user.access
+}
+
 api.setUserAccess = async (userid, lvl) => {
     let user = await User.findOne({id: userid}).exec()
     lvl = Number(lvl)
