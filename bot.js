@@ -85,7 +85,7 @@ bot.addHandler('message_new', async (data, res) => {
 
 // Второстепенный обработчик
 bot.addHandler('message_new', (data) => {
-    console.log(`Got ${data.text}`)
+    console.log('ID: '+ data.from_id + " wrote: "+ data.text)
 })
 
 // Обработчик подтверждения

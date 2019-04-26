@@ -10,8 +10,8 @@ let api = {}
 
 
 api.getUserAccess= async (userid) => {
-    let user = await User.findOne({id: userid}).exec()
-
+    let user = await User.findOne({id: userid})
+    if (!user) return 0
     return user.access
 }
 
