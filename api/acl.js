@@ -5,9 +5,9 @@ const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 mongoose.connect(config.mongo, { useNewUrlParser: true })
 
 const User = mongoose.model('User', { id: String, access: Number })
+const Group = mongoose.model('Group', { id: Number, nsfw: Boolean })
 
 let api = {}
-
 
 api.getUserAccess= async (userid) => {
     let user = await User.findOne({id: userid})
@@ -27,6 +27,35 @@ api.setUserAccess = async (userid, lvl) => {
         user.save()
     }
 }
+
+api.setGroupNsfw = async (peerid, state) => {
+    let group = await Group.findOne({id: peerid}).exec()
+    state = Boolean(state)
+
+    if (group) {
+        group.nsfw = state
+        group.save()
+    } else {
+        group = new Group({id: peerid, nsfw: state})
+        group.save()
+    }
+}
+
+api.hasGroupNsfwTo = async (peerid) => {
+    let group = await Group.findOne({id: peerid}).exec()
+
+    if (!group) {
+        return false
+    }
+
+    if (group.nsfw == true) {
+        return true
+    } else {
+        return false
+    }
+}
+
+
 
 api.hasUserPermissionTo = async (userid, lvl) => {
     let user = await User.findOne({id: userid}).exec()

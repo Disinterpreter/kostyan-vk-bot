@@ -14,6 +14,7 @@ let groups = [
 
 module.exports = {
     keywords: ['мем', 'мемас', 'мемчик', 'юмор'],
+    nsfw: true,
     callback: async (data) => {
         let post = await vk.random.getPost(groups[Math.floor(Math.random()*groups.length)])
         vk.message.send(data.peer_id, '', post)

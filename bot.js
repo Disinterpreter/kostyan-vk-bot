@@ -75,6 +75,14 @@ bot.addHandler('message_new', async (data, res) => {
                     if (!can)
                         return
                 }
+                // console.log("NSFW of cmd: "+ item.nsfw)
+                // console.log("NSFW of chat: "+ await acl.hasGroupNsfwTo(data.peer_id))
+                if (item.nsfw) { // проверка цензуры (acl)
+                    let can = await acl.hasGroupNsfwTo(data.peer_id)
+                    if (!can || can == false)
+                        return
+                }
+
 
                 item.callback(data, args, cmd, bot)
                 return
