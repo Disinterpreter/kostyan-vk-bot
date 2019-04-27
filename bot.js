@@ -79,7 +79,7 @@ bot.addHandler('message_new', async (data, res) => {
                 // console.log("NSFW of chat: "+ await acl.hasGroupNsfwTo(data.peer_id))
                 if (item.nsfw) { // проверка цензуры (acl)
                     let can = await acl.hasGroupNsfwTo(data.peer_id)
-                    if (!can || can == false)
+                    if (!can || can == false || data.peer_id != data.from_id)
                         return
                 }
 
