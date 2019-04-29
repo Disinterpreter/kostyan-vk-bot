@@ -3,6 +3,9 @@ const meme = require('./meme')
 const advice = require('./advice')
 const boxies = require('./boxies')
 const tyan = require('./tyan')
+const avx = require('./avx')
+const biography = require('./biography')
+const varlamov = require('./varlamov')
 
 module.exports = {
     keywords: ['дай', 'где'],
@@ -25,6 +28,21 @@ module.exports = {
         tyan.keywords.forEach(item => {
             if (args[0] == item) {
                 tyan.callback(data)
+            }
+        })
+        avx.keywords.forEach(item => {
+            if (args[0] == item) {
+                avx.callback(data)
+            }
+        })
+        biography.keywords.forEach(item => {
+            if (args[0] == item) {
+                biography.callback(data)
+            }
+        })
+        varlamov.keywords.forEach(item => {
+            if (args[0] == item) {
+                varlamov.callback(data)
             }
         })
     }
