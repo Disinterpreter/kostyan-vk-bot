@@ -6,6 +6,5 @@ module.exports = {
     callback: async (data) => {
         const response = await axios.get('http://fucking-great-advice.ru/api/random')
         vk.message.send(data.peer_id, response.data.text)
-        
     }
 }

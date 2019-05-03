@@ -5,7 +5,7 @@ const acl = require('./api/acl')
 
 const Bot = require('./classes/Bot');
 const commands = require('./commands/_export');
-const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
+const config = require('./config');
 
 const bot = new Bot(config.name, config['public-id']);
 
@@ -28,7 +28,7 @@ bot.addHandler('message_new', async (data, res) => {
 
     let arr = data.text.split(' ');
     arr.forEach( (item) => {
-        item.replace('[.,?]', '');
+        item = item.replace('[.,?]', '');
     });
 
     let cmd = '';
@@ -39,13 +39,13 @@ bot.addHandler('message_new', async (data, res) => {
         cmd = arr.shift();
         args = arr;
 
-        if (cmd == bot.callname || cmd == bot.link) {
+        if (cmd.search(bot.callname) !== -1 || cmd == bot.link) {
             cmd = args.shift();
         } else {
             bot.setFastres(data.peer_id, false)
         }
 
-        if (cmd == '' && args == '') {
+        if (!cmd && !args) {
             return
         }
 
@@ -54,7 +54,7 @@ bot.addHandler('message_new', async (data, res) => {
 
     if (!force) {
         // поиск обращения к боту
-        if (arr[0] != bot.callname && arr[0] != bot.link) {
+        if (arr[0].search(bot.callname) === -1 && arr[0] != bot.link) {
             return false
         }
 
@@ -65,11 +65,12 @@ bot.addHandler('message_new', async (data, res) => {
         }
     }
 
+    if (cmd == '') cmd = 'fastreshook' // очередной костыль для regex
+
     // перебор массива с командами
-    bot.buffer.forEach(item => {
-        // поиск совпадений
-        item.keywords.forEach( async keyword => {
-            if (keyword == cmd && item.callback) {
+    for (let item of bot.buffer) {
+        for (let keyword of item.keywords) {
+            if (cmd.search(keyword) !== -1 && item.callback) {
                 if (item.access) { // проверка прав (acl)
                     let can = await acl.hasUserPermissionTo(data.from_id, item.access)
                     if (!can)
@@ -83,12 +84,12 @@ bot.addHandler('message_new', async (data, res) => {
                         return
                 }
 
-
                 item.callback(data, args, cmd, bot)
                 return
             }
-        })
-    })
+        }
+    }
+    
 })
 
 // Второстепенный обработчик

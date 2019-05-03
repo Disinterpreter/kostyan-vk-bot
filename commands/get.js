@@ -1,4 +1,4 @@
-const vk = require('../api/vk')
+//const vk = require('../api/vk')
 const meme = require('./meme')
 const advice = require('./advice')
 const boxies = require('./boxies')
@@ -7,6 +7,24 @@ const avx = require('./avx')
 const biography = require('./biography')
 const varlamov = require('./varlamov')
 
+module.exports = {
+    keywords: ['дай', 'где'],
+    callback: (data, args) => {
+      [
+        advice,
+        avx,
+        biography,
+        boxies,
+        meme,
+        tyan,
+        varlamov
+      ].forEach((item) => {
+        if (item.keywords.includes(args[0])) item.callback(data)
+      })
+    }
+}
+
+/*
 module.exports = {
     keywords: ['дай', 'где'],
     callback: (data, args) => {
@@ -47,3 +65,4 @@ module.exports = {
         })
     }
 }
+*/
